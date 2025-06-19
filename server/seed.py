@@ -3,7 +3,7 @@
 
 import datetime
 from app import app
-from models import db, Employee, Meeting, Project
+from models import db, Employee, Meeting, Project, employee_meetings
 
 with app.app_context():
 
@@ -38,6 +38,20 @@ with app.app_context():
     db.session.add_all([p1, p2])
     db.session.commit()
 
+    db.session.query(employee_meetings).delete()
+    db.session.commit()
+    Employee.query.delete()
+    Meeting.query.delete()
+    Project.query.delete()
+
     # Many-to-many relationship between employee and meeting
+
+    e1.meetings.append(m1)
+    e1.meetings.append(m2)
+    # Add employees to a meeting
+    m2.employees.append(e2)
+    m2.employees.append(e3)
+    m2.employees.append(e4)
+    db.session.commit()
 
     # Many-to-many relationship between employee and project through assignment
